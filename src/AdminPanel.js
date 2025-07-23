@@ -10,7 +10,7 @@ export default function AdminPanel() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/admin/login", {
+    const res = await fetch(`${API}/api/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -22,7 +22,7 @@ export default function AdminPanel() {
 
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/admin/quiz", {
+    const res = await fetch(`${API}/api/admin/quiz`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
