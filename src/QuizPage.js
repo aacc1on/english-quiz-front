@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+const API = process.env.REACT_APP_API_URL;
 export default function QuizPage() {
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
