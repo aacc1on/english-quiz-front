@@ -12,7 +12,7 @@ export default function QuizPage() {
     fetch(`${API}/api/quiz`)
       .then(res => res.json())
       .then(data => setQuiz(data.quiz || []));
-  }, [API]); // ✅ dependency array fixed
+  }, []); // ✅ dependency array-ը թողեք դատարկ
 
   const handleAnswerChange = (idx, val) => {
     setAnswers(a => ({ ...a, [idx]: val }));
