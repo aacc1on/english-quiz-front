@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 const API = process.env.REACT_APP_API_URL;
+
 export default function QuizPage() {
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [score, setScore] = useState(null);
-  const API = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     fetch(`${API}/api/quiz`)
       .then(res => res.json())
       .then(data => setQuiz(data.quiz || []));
-  }, []);
+  }, [API]); // ✅ dependency array fixed
 
   const handleAnswerChange = (idx, val) => {
     setAnswers(a => ({ ...a, [idx]: val }));
