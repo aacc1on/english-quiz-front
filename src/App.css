@@ -1,3 +1,10 @@
+body {
+  background: #f6f8fa;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +42,79 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.main-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+}
+
+h1, h2 {
+  color: #2d3748;
+  margin-bottom: 24px;
+}
+
+input, textarea, button {
+  font-size: 16px;
+  margin-bottom: 16px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.quiz-question {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.table-results {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.table-results th, .table-results td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.table-results th {
+  background: #e0e7ef;
+}
+
+.success {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: bold;
 }
