@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function AdminPanel() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
