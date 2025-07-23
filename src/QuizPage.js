@@ -6,9 +6,9 @@ export default function QuizPage() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [score, setScore] = useState(null);
-
+  const API = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    fetch("/api/quiz")
+    fetch(`${API}/api/quiz`)
       .then(res => res.json())
       .then(data => setQuiz(data.quiz || []));
   }, []);
@@ -23,7 +23,7 @@ export default function QuizPage() {
       alert("Name and surname required");
       return;
     }
-    const res = await fetch("/api/quiz/submit", {
+    const res = await fetch(`${API}/api/quiz/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

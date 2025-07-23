@@ -33,7 +33,7 @@ export default function AdminPanel() {
   };
 
   const fetchResults = async () => {
-    const res = await fetch("/api/admin/results", {
+    const res = await fetch(`${API}/api/admin/login`, {
       credentials: "include",
     });
     const data = await res.json();
