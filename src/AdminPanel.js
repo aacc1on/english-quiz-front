@@ -9,6 +9,7 @@ export default function AdminPanel() {
   const [text, setText] = useState("");
   const [quizUrl, setQuizUrl] = useState("");
   const [results, setResults] = useState([]);
+  const [expandedResults, setExpandedResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -113,6 +114,13 @@ export default function AdminPanel() {
     }
   };
 
+  const toggleExpandResult = (index) => {
+    setExpandedResults(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   const handleLogout = () => {
     setLoggedIn(false);
     setUsername("");
@@ -120,6 +128,7 @@ export default function AdminPanel() {
     setText("");
     setQuizUrl("");
     setResults([]);
+    setExpandedResults({});
     setError("");
   };
 
@@ -214,18 +223,82 @@ export default function AdminPanel() {
                   <th>Score</th>
                   <th>Percentage</th>
                   <th>Date</th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
                 {results.map((r, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{r.name}</td>
-                    <td>{r.surname}</td>
-                    <td>{r.score}/10</td>
-                    <td>{Math.round((r.score / 10) * 100)}%</td>
-                    <td>{new Date(r.date).toLocaleString()}</td>
-                  </tr>
+                  <React.Fragment key={i}>
+                    <tr>
+                      <td>{i + 1}</td>
+                      <td>{r.name}</td>
+                      <td>{r.surname}</td>
+                      <td>{r.score}/{r.total || 10}</td>
+                      <td>{r.percentage}%</td>
+                      <td>{new Date(r.date).toLocaleString()}</td>
+                      <td>
+                        <button 
+                          className="details-btn"
+                          onClick={() => toggleExpandResult(i)}
+                        >
+                          {expandedResults[i] ? 'Hide Details' : 'Show Details'}
+                        </button>
+                      </td>
+                    </tr>
+                    {expandedResults[i] && r.detailedResults && (
+                      <tr>
+                        <td colSpan="7">
+                          <div className="detailed-results">
+                            <h4>Detailed Results for {r.name} {r.surname}</h4>
+                            <div className="questions-grid">
+                              {r.detailedResults.map((detail, qIndex) => (
+                                <div 
+                                  key={qIndex} 
+                                  className={`question-detail ${detail.isCorrect ? 'correct' : 'incorrect'}`}
+                                >
+                                  <div className="question-header">
+                                    <span className="question-number">Q{detail.questionNumber}</span>
+                                    <span className={`status ${detail.isCorrect ? 'correct' : 'incorrect'}`}>
+                                      {detail.isCorrect ? '✓ Correct' : '✗ Wrong'}
+                                    </span>
+                                  </div>
+                                  <div className="question-content">
+                                    <p><strong>Word:</strong> {detail.word}</p>
+                                    <p><strong>Question:</strong> {detail.question}</p>
+                                    <p><strong>Student's answer:</strong> 
+                                      <span className={detail.isCorrect ? 'correct-answer' : 'wrong-answer'}>
+                                        {detail.userAnswer}
+                                      </span>
+                                    </p>
+                                    {!detail.isCorrect && (
+                                      <p><strong>Correct answer:</strong> 
+                                        <span className="correct-answer">{detail.correctAnswer}</span>
+                                      </p>
+                                    )}
+                                    <div className="all-options">
+                                      <strong>All options:</strong>
+                                      <ul>
+                                        {detail.options.map((option, optIndex) => (
+                                          <li key={optIndex} className={
+                                            option === detail.correctAnswer ? 'correct-option' : 
+                                            option === detail.userAnswer && !detail.isCorrect ? 'wrong-option' : ''
+                                          }>
+                                            {option}
+                                            {option === detail.correctAnswer && ' ✓'}
+                                            {option === detail.userAnswer && !detail.isCorrect && ' ✗'}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>

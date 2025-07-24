@@ -7,6 +7,8 @@ export default function QuizPage() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [score, setScore] = useState(null);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [percentage, setPercentage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -81,6 +83,8 @@ export default function QuizPage() {
       const data = await res.json();
       console.log('[FRONTEND] Submit response data:', data);
       setScore(data.score);
+      setPercentage(data.percentage);
+      setWrongAnswers(data.wrongAnswers || []);
     } catch (err) {
       console.error('[FRONTEND] Error submitting quiz:', err);
       alert(`Failed to submit quiz: ${err.message}`);
@@ -120,7 +124,6 @@ export default function QuizPage() {
   }
 
   if (score !== null) {
-    const percentage = Math.round((score / quiz.length) * 100);
     const message = percentage >= 70 ? "Great job!" : percentage >= 50 ? "Good effort!" : "Keep studying!";
     
     return (
@@ -130,6 +133,37 @@ export default function QuizPage() {
           <p className="score">Your score: <strong>{score} / {quiz.length}</strong></p>
           <p className="percentage">Percentage: <strong>{percentage}%</strong></p>
           <p className={percentage >= 70 ? "success" : ""}>{message}</p>
+          
+          {wrongAnswers.length > 0 && (
+            <div className="wrong-answers-section">
+              <h3>Review Your Mistakes:</h3>
+              {wrongAnswers.map((mistake, index) => (
+                <div key={index} className="wrong-answer-item">
+                  <h4>Question {mistake.questionNumber}</h4>
+                  <p><strong>Word:</strong> {mistake.word}</p>
+                  <p><strong>Question:</strong> {mistake.question}</p>
+                  <p><strong>Your answer:</strong> <span className="user-wrong-answer">{mistake.userAnswer}</span></p>
+                  <p><strong>Correct answer:</strong> <span className="correct-answer">{mistake.correctAnswer}</span></p>
+                  <div className="all-options">
+                    <strong>All options were:</strong>
+                    <ul>
+                      {mistake.options.map((option, optIndex) => (
+                        <li key={optIndex} className={
+                          option === mistake.correctAnswer ? 'correct-option' : 
+                          option === mistake.userAnswer ? 'wrong-option' : ''
+                        }>
+                          {option}
+                          {option === mistake.correctAnswer && ' ✓'}
+                          {option === mistake.userAnswer && option !== mistake.correctAnswer && ' ✗'}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
           <button onClick={() => window.location.reload()}>Take Quiz Again</button>
         </div>
       </div>
